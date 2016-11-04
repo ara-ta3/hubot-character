@@ -26,6 +26,12 @@ function initSlackAPI(token) {
 
 module.exports = (robot) => {
     const slack = initSlackAPI(slackAPIToken);
+
+    robot.respond(/characters$/i, (res) => {
+        const commands = characters.map((c) => `${robot.name} ${c.respond}`);
+        res.send("Available commands\n" + commands.join("\n"));
+    });
+
     characters.forEach((character) => {
         const r = new RegExp(character.respond + "$", "i");
         robot.respond(r, (res) => {
