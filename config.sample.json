@@ -1,0 +1,13 @@
+{
+    "characters": [
+        {
+            "name": "smiley",
+            "icon": ":smiley:",
+            "respond": "smile",
+            "messages": [
+                "hello world {name}"
+            ]
+        }
+    ]
+}
+
