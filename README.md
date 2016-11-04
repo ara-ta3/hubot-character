@@ -72,3 +72,7 @@ If your setting is something like the below, the bot's response will be like the
     ]
 }
 ```
+
+At here, hubot's name is "dark".  
+
+![image](https://raw.githubusercontent.com/ara-ta3/hubot-character/images/hubot-character-screenshot-01.png)
