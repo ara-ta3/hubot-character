@@ -73,7 +73,7 @@ If your setting is something like the below, the bot's response will be like the
 }
 ```
 
-At here, hubot's name is "dark".  
+* hubot's name is "dark" here.  
 
 ![image](https://raw.githubusercontent.com/ara-ta3/hubot-character/image/hubot-character-screenshot-01.png)
 
