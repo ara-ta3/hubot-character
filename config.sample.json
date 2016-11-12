@@ -6,7 +6,8 @@
             "respond": "smile",
             "messages": [
                 "hello world {name}"
-            ]
+            ],
+            "help": "some helps for this command. if this doesn't exists, help will be blank"
         }
     ]
 }
