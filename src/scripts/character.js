@@ -28,8 +28,11 @@ module.exports = (robot) => {
     const slack = initSlackAPI(slackAPIToken);
 
     robot.respond(/characters$/i, (res) => {
-        const commands = characters.map((c) => `${robot.name} ${c.respond}`);
-        res.send("Available commands\n" + commands.join("\n"));
+        const commands = characters.map((c) => {
+            const help = c.help || "";
+            return `${robot.name} ${c.respond} - ${help}`
+        });
+        res.send(commands.join("\n"));
     });
 
     characters.forEach((character) => {
