@@ -34,11 +34,16 @@ module.exports = (robot) => {
         });
         res.send(commands.join("\n"));
     });
-
+    const cache = {};
     characters.forEach((character) => {
         const r = new RegExp(character.respond + "$", "i");
         robot.respond(r, (res) => {
+            const selectedOnceBefore = cache[character.name];
+            const messages = (character.message.length > 1 && selectedOnceBefore) ?
+                character.messages.filter((m) => m !== selectedOnceBefore) :
+                character.messages;
             const selected = res.random(character.messages);
+            cache[character.name] = selected
             const message = format(selected, {
                 "name": res.message.user.name
             });
