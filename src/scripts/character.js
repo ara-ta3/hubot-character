@@ -9,13 +9,19 @@
 const fs        = require("fs");
 const format    = require("string-template");
 const slackAPI  = require('slackbotapi');
-const confPath  = process.env.HUBOT_CHARACTER_CONFIG
-const config    = require(fs.realpathSync(confPath));
 const slackAPIToken = process.env.HUBOT_SLACK_TOKEN
-const characters    = config.characters;
+
+function initConfig(confPath) {
+    if ( confPath === undefined ) {
+        throw new Error("HUBOT_CHARACTER_CONFIG cannot be empty! value: undefined");
+    }
+    const config = require(fs.realpathSync(confPath));
+    return config;
+};
+
 function initSlackAPI(token) {
     if ( token === undefined ) {
-        return new Error(`HUBOT_SLACK_TOKEN cannot be empty! value: undefined`);
+        throw new Error(`HUBOT_SLACK_TOKEN cannot be empty! value: undefined`);
     }
     return new slackAPI({
         'token': token,
@@ -25,7 +31,16 @@ function initSlackAPI(token) {
 };
 
 module.exports = (robot) => {
-    const slack = initSlackAPI(slackAPIToken);
+    let config;
+    let slack;
+    let characters = [];
+    try {
+        config  = initConfig(process.env.HUBOT_CHARACTER_CONFIG);
+        slack   = initSlackAPI(slackAPIToken);
+        characters = config.characters;
+    } catch (e) {
+        robot.logger.error(e);
+    }
 
     robot.respond(/characters$/i, (res) => {
         const commands = characters.map((c) => {
@@ -34,11 +49,16 @@ module.exports = (robot) => {
         });
         res.send(commands.join("\n"));
     });
-
+    const cache = {};
     characters.forEach((character) => {
         const r = new RegExp(character.respond + "$", "i");
         robot.respond(r, (res) => {
+            const selectedOnceBefore = cache[character.name];
+            const messages = (character.message.length > 1 && selectedOnceBefore) ?
+                character.messages.filter((m) => m !== selectedOnceBefore) :
+                character.messages;
             const selected = res.random(character.messages);
+            cache[character.name] = selected
             const message = format(selected, {
                 "name": res.message.user.name
             });
