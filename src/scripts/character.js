@@ -2,7 +2,7 @@
 //   misc
 //
 // Commands:
-//   hubot characters 
+//   hubot characters
 //
 
 "use strict"
@@ -62,7 +62,7 @@ module.exports = (robot) => {
             const message = format(selected, {
                 "name": res.message.user.name
             });
-            const c = res.message.rawMessage.channel;
+            const c = res.message.room;
             slack.reqAPI("chat.postMessage", {
                 channel: c,
                 text: message,
