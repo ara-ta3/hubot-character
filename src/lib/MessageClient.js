@@ -26,12 +26,16 @@ class MessageClient {
     }
 
     postMultiMessage(messages, channel, speakerName) {
-        return messages.map((setting) => {
-            const message = format(setting.message, {
-                "name": speakerName
+        return messages.reduce((pre, setting) => {
+            return pre.then((values) => {
+                const message = format(setting.message, {
+                    "name": speakerName
+                });
+                return this.messageSender(message, channel, setting.name, setting.icon).then(
+                    (v) => Promise.resolve(values.concat([v]))
+                );
             });
-            return this.messageSender(message, channel, setting.name, setting.icon);
-        });
+        }, Promise.resolve([]));
     }
 }
 
