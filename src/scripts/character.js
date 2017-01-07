@@ -45,18 +45,22 @@ module.exports = (robot) => {
     }
 
     function postMessageWithSlack(message, channel, userName, icon) {
-        slack.reqAPI("chat.postMessage", {
-            channel: channel,
-            text: message,
-            username: userName,
-            link_names: 0,
-            pretty: 1,
-            icon_emoji: icon
-        }, (res) => {
-            if(!res.ok) {
-                throw new Error(`something occured with slack api. ${res.error}`);
-            }
-        })
+        return new Promise((resolve, reject) => {
+            slack.reqAPI("chat.postMessage", {
+                channel: channel,
+                text: message,
+                username: userName,
+                link_names: 0,
+                pretty: 1,
+                icon_emoji: icon
+            }, (res) => {
+                if(!res.ok) {
+                    robot.logger.error(`something occured with slack api. ${res.error}`);
+                    reject(new Error(`something occured with slack api. ${res.error}`));
+                }
+                resolve();
+            })
+        });
     }
 
     robot.respond(/characters$/i, (res) => {
