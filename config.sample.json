@@ -8,6 +8,25 @@
                 "hello world {name}"
             ],
             "help": "some helps for this command. if this doesn't exists, help will be blank"
+        },
+        {
+            "name": "laughing",
+            "icon": ":laughing:",
+            "respond": "laughing",
+            "messages": [
+                [
+                    {
+                        "name": "laughing",
+                        "icon": ":laughing:",
+                        "message": "hello world {name}"
+                    },
+                    {
+                        "name": "innocent",
+                        "icon": ":innocent:",
+                        "message": "good bye {name}"
+                    }
+                ]
+            ]
         }
     ]
 }
