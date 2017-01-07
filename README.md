@@ -49,6 +49,18 @@ $cat config.json
                 "messages the bot will replay to you",
                 "you can use the macro {name}.",
                 "ex 'hello world {name}'",
+                [
+                    {
+                        "name": "the bot name. this overrides the bot's name",
+                        "icon": "the bot's icon this also overrides the bot's icon",
+                        "message": "message the bot will reply to you"
+                    },
+                    {
+                        "name": "...",
+                        "icon": "...",
+                        "message": "this is the message too. this is posted at a time with the above message."
+                    }
+                ]
             ]
         }
     ]
@@ -67,6 +79,25 @@ If your setting is something like the below, the bot's response will be like the
             "messages": [
                 "hello world {name}",
                 "what's up {name}"
+            ]
+        },
+        {
+            "name": "laughing",
+            "icon": ":laughing:",
+            "respond": "laughing",
+            "messages": [
+                [
+                    {
+                        "name": "laughing",
+                        "icon": ":laughing:",
+                        "message": "hello world {name}"
+                    },
+                    {
+                        "name": "innocent",
+                        "icon": ":innocent:",
+                        "message": "good bye {name}"
+                    }
+                ]
             ]
         }
     ]
