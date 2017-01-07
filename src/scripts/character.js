@@ -7,9 +7,10 @@
 
 "use strict"
 const fs        = require("fs");
-const format    = require("string-template");
 const slackAPI  = require('slackbotapi');
-const slackAPIToken = process.env.HUBOT_SLACK_TOKEN
+const slackAPIToken = process.env.HUBOT_SLACK_TOKEN;
+const characterConfigPath = process.env.HUBOT_CHARACTER_CONFIG;
+const MessageClient = require("../lib/MessageClient");
 
 function initConfig(confPath) {
     if ( confPath === undefined ) {
@@ -35,11 +36,27 @@ module.exports = (robot) => {
     let slack;
     let characters = [];
     try {
-        config  = initConfig(process.env.HUBOT_CHARACTER_CONFIG);
+        robot.logger.info(`Load ${characterConfigPath} as character config.`);
+        config  = initConfig(characterConfigPath);
         slack   = initSlackAPI(slackAPIToken);
         characters = config.characters;
     } catch (e) {
-        robot.logger.error(e);
+        robot.logger.error(e.toString());
+    }
+
+    function postMessageWithSlack(message, channel, userName, icon) {
+        slack.reqAPI("chat.postMessage", {
+            channel: channel,
+            text: message,
+            username: userName,
+            link_names: 0,
+            pretty: 1,
+            icon_emoji: icon
+        }, (res) => {
+            if(!res.ok) {
+                throw new Error(`something occured with slack api. ${res.error}`);
+            }
+        })
     }
 
     robot.respond(/characters$/i, (res) => {
@@ -49,33 +66,15 @@ module.exports = (robot) => {
         });
         res.send(commands.join("\n"));
     });
-    const cache = {};
-    characters.forEach((character) => {
-        const r = new RegExp(character.respond + "$", "i");
+
+    characters.map(
+        (character) => new MessageClient(postMessageWithSlack, character)
+    ).forEach((messageClient) => {
+        const r = new RegExp(messageClient.character.respond + "$", "i");
         robot.respond(r, (res) => {
-            const selectedOnceBefore = cache[character.name];
-            const messages = (character.messages.length > 1 && selectedOnceBefore) ?
-                character.messages.filter((m) => m !== selectedOnceBefore) :
-                character.messages;
-            const selected = res.random(character.messages);
-            cache[character.name] = selected
-            const message = format(selected, {
-                "name": res.message.user.name
-            });
-            const c = res.message.room;
-            slack.reqAPI("chat.postMessage", {
-                channel: c,
-                text: message,
-                username: character.name,
-                link_names: 0,
-                pretty: 1,
-                icon_emoji: character.icon
-            }, (res) => {
-                if(!res.ok) {
-                    robot.logger.error(`something ocuured ${res}`);
-                    return;
-                }
-            })
-        })
+            const channel = res.message.room;
+            const speakerName = res.message.user.name;
+            return messageClient.postMessage(channel, speakerName);
+        });
     });
 }
