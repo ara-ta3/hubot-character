@@ -5,10 +5,15 @@ class MockRobot {
     constructor(name) {
         this.name = name;
         this.responds = {};
+        this.hears = {};
     }
 
     respond(regexp, callback) {
         this.responds[regexp] = callback;
+    }
+
+    hear(regexp, callback) {
+        this.hears[regexp] = callback;
     }
 }
 
@@ -101,7 +106,7 @@ describe("HubotCharacter", () => {
             mockMessageSender
         );
         const errors = hubotCharacter.run();
-        it("robot should have some regexp", () => {
+        it("robot should have some regexp and errors should have broken settings", () => {
             assert.deepEqual(Object.keys(robot.responds), [
                 "/characters$/i",
                 "/smile$/i",
@@ -114,6 +119,38 @@ describe("HubotCharacter", () => {
             ]);
         });
 
+    });
+
+    context("run with characters which has the key of 'hear'", () => {
+        const characters = [
+            {
+                "name": "smiley",
+                "icon": ":smiley:",
+                "respond": "smile",
+                "hear": "smile",
+                "messages": [
+                    "hello world {name}",
+                ],
+                "help": "some helps for this command. if this doesn't exists, help will be blank"
+            }
+        ];
+        const robot = new MockRobot("mock");
+        const hubotCharacter = new HubotCharacter(
+            robot,
+            characters,
+            mockMessageSender
+        );
+        hubotCharacter.run();
+        it("robot's responds and hear should have some regexp", () => {
+            assert.deepEqual(Object.keys(robot.responds), [
+                "/characters$/i",
+                "/smile$/i",
+            ])
+
+            assert.deepEqual(Object.keys(robot.hears), [
+                "/smile/i",
+            ])
+        });
     });
 });
 

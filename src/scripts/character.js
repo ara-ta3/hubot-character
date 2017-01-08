@@ -66,7 +66,7 @@ module.exports = (robot) => {
     const errors = hubotCharacter.run();
     if (errors.length > 0) {
         robot.logger.warning("some character settings has invalid format");
-        robot.logger.warning("The object keys of 'name, icon, respond, messages' are required and the value of 'messages' must be array");
+        robot.logger.warning("The object keys of 'name, icon, (respond or hear), messages' are required and the value of 'messages' must be array");
         robot.logger.warning(`Invalid settings: ${JSON.stringify(errors)}`);
     }
 }

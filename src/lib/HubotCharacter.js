@@ -4,7 +4,7 @@ const MessageClient = require("../lib/MessageClient");
 function validCharacter(character) {
     return character.name !== undefined &&
         character.icon !== undefined &&
-        character.respond !== undefined &&
+        (character.respond !== undefined || character.hear !== undefined) &&
         Array.isArray(character.messages);
 }
 
@@ -32,12 +32,22 @@ class HubotCharacter {
                 errors = errors.concat([messageClient.character]);
                 return;
             }
-            const r = new RegExp(messageClient.character.respond + "$", "i");
-            this.robot.respond(r, (res) => {
-                const channel = res.message.room;
-                const speakerName = res.message.user.name;
-                return messageClient.postMessage(channel, speakerName);
-            });
+            if (messageClient.character.respond) {
+                const r = new RegExp(messageClient.character.respond + "$", "i");
+                this.robot.respond(r, (res) => {
+                    const channel = res.message.room;
+                    const speakerName = res.message.user.name;
+                    return messageClient.postMessage(channel, speakerName);
+                });
+            }
+            if (messageClient.character.hear) {
+                const r = new RegExp(messageClient.character.hear, "i");
+                this.robot.hear(r, (res) => {
+                    const channel = res.message.room;
+                    const speakerName = res.message.user.name;
+                    return messageClient.postMessage(channel, speakerName);
+                });
+            }
         });
         return errors;
     }
