@@ -4,6 +4,7 @@
             "name": "smiley",
             "icon": ":smiley:",
             "respond": "smile",
+            "hear": "^smile$",
             "messages": [
                 "hello world {name}"
             ],

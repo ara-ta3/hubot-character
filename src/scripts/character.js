@@ -10,7 +10,7 @@ const fs        = require("fs");
 const slackAPI  = require('slackbotapi');
 const slackAPIToken = process.env.HUBOT_SLACK_TOKEN;
 const characterConfigPath = process.env.HUBOT_CHARACTER_CONFIG;
-const MessageClient = require("../lib/MessageClient");
+const HubotCharacter = require("../lib/HubotCharacter");
 
 function initConfig(confPath) {
     if ( confPath === undefined ) {
@@ -62,23 +62,11 @@ module.exports = (robot) => {
             })
         });
     }
-
-    robot.respond(/characters$/i, (res) => {
-        const commands = characters.map((c) => {
-            const help = c.help || "";
-            return `${robot.name} ${c.respond} - ${help}`
-        });
-        res.send(commands.join("\n"));
-    });
-
-    characters.map(
-        (character) => new MessageClient(postMessageWithSlack, character)
-    ).forEach((messageClient) => {
-        const r = new RegExp(messageClient.character.respond + "$", "i");
-        robot.respond(r, (res) => {
-            const channel = res.message.room;
-            const speakerName = res.message.user.name;
-            return messageClient.postMessage(channel, speakerName);
-        });
-    });
+    const hubotCharacter = new HubotCharacter(robot, characters, postMessageWithSlack)
+    const errors = hubotCharacter.run();
+    if (errors.length > 0) {
+        robot.logger.warning("some character settings has invalid format");
+        robot.logger.warning("The object keys of 'name, icon, (respond or hear), messages' are required and the value of 'messages' must be array");
+        robot.logger.warning(`Invalid settings: ${JSON.stringify(errors)}`);
+    }
 }

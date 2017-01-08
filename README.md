@@ -10,7 +10,7 @@ $cat
 "hubot-character"
 ]
 # edit config.json. also see config.sample.json
-$cat config.json
+rcat config.json
 {
     "characters": [
         {
@@ -45,6 +45,7 @@ $cat config.json
             "name": "the bot name",
             "icon": "slack icon for showing the bot's icon",
             "respond": "regular expression for the bot to respond",
+            "hear": "regular expression for the bot to hear",
             "messages": [
                 "messages the bot will replay to you",
                 "you can use the macro {name}.",
@@ -76,6 +77,7 @@ If your setting is something like the below, the bot's response will be like the
             "name": "smiley",
             "icon": ":smiley:",
             "respond": "smile",
+            "hear": "^smile$",
             "messages": [
                 "hello world {name}",
                 "what's up {name}"
