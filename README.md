@@ -1,5 +1,7 @@
 # hubot-character
 
+[![Build Status](https://travis-ci.org/ara-ta3/hubot-character.svg)](https://travis-ci.org/ara-ta3/hubot-character)  
+
 # Install
 
 ```
