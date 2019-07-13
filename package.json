@@ -1,6 +1,6 @@
 {
   "name": "hubot-character",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/ara-ta3/hubot-character#readme",
   "engines": {
-      "node": ">= 8"
+    "node": ">= 8"
   },
   "dependencies": {
     "@slack/web-api": "^5.0.1",
