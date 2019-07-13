@@ -17,8 +17,11 @@
     "url": "https://github.com/ara-ta3/hubot-character/issues"
   },
   "homepage": "https://github.com/ara-ta3/hubot-character#readme",
+  "engines": {
+      "node": ">= 8"
+  },
   "dependencies": {
-    "slackbotapi": "^1.3.9",
+    "@slack/web-api": "^5.0.1",
     "string-template": "^1.0.0"
   },
   "devDependencies": {
