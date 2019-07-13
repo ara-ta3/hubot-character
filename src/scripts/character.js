@@ -7,7 +7,7 @@
 
 "use strict"
 const fs        = require("fs");
-const slackAPI  = require('slackbotapi');
+const { WebClient } = require('@slack/web-api');
 const slackAPIToken = process.env.HUBOT_SLACK_TOKEN;
 const characterConfigPath = process.env.HUBOT_CHARACTER_CONFIG;
 const HubotCharacter = require("../lib/HubotCharacter");
@@ -24,11 +24,7 @@ function initSlackAPI(token) {
     if ( token === undefined ) {
         throw new Error(`HUBOT_SLACK_TOKEN cannot be empty! value: undefined`);
     }
-    return new slackAPI({
-        'token': token,
-        'logging': false,
-        'autoReconnect': true
-    });
+    return new WebClient(token);
 };
 
 module.exports = (robot) => {
@@ -46,7 +42,7 @@ module.exports = (robot) => {
 
     function postMessageWithSlack(message, channel, userName, icon) {
         return new Promise((resolve, reject) => {
-            slack.reqAPI("chat.postMessage", {
+            slack.chat.postMessage({
                 channel: channel,
                 text: message,
                 username: userName,
