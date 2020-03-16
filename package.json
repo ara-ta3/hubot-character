@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "mocha": "6.1.4",
-    "power-assert": "1.6.1"
+    "power-assert": "1.6.1",
+    "minimist": ">=1.2.2"
   }
 }
