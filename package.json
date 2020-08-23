@@ -25,8 +25,8 @@
     "string-template": "^1.0.0"
   },
   "devDependencies": {
-    "mocha": "6.1.4",
-    "power-assert": "1.6.1",
-    "minimist": ">=1.2.2"
+    "minimist": ">=1.2.2",
+    "mocha": "^8.1.1",
+    "power-assert": "1.6.1"
   }
 }
