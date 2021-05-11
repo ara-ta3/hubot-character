@@ -1,6 +1,6 @@
 {
   "name": "hubot-character",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "",
   "main": "main.js",
   "scripts": {
