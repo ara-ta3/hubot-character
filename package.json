@@ -21,7 +21,7 @@
     "node": ">= 8"
   },
   "dependencies": {
-    "@slack/web-api": "^5.15.0",
+    "@slack/web-api": "^6.2.3",
     "string-template": "^1.0.0"
   },
   "devDependencies": {
